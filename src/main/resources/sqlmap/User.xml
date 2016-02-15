@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.puhui.vo.User">
+    <!-- 根据id获取用户信息 -->
+    <select id="findUserById" parameterType="int" resultType="com.puhui.vo.User">
+                select * from user where id = #{id}
+        </select>
+    <!-- 获取所有的用户 -->
+    <select id="findAllUser" parameterType="int" resultType="com.puhui.vo.User">
+                select * from user
+        </select>
+    <!-- 自定义条件查询用户列表 -->
+    <select id="findUserByUsername" parameterType="java.lang.String"
+            resultType="com.puhui.vo.User">
+                select * from user where username like '%${value}%'
+        </select>
+    <!-- 使用自增长主键添加用户 -->
+    <insert id="insertUser" parameterType="com.puhui.vo.User">
+        <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+            select LAST_INSERT_ID()
+        </selectKey>
+        insert into user(username,birthday,sex,address)
+        values(#{username},#{birthday},#{sex},#{address})
+    </insert>
+    <!-- 使用 uuid 主键添加用户 -->
+    <insert id="insertUser1" parameterType="com.puhui.vo.User">
+        <selectKey keyProperty="id" order="BEFORE" resultType="java.lang.String">
+            select uuid()
+        </selectKey>
+        insert into user(id,username,birthday,sex,address)
+        values(#{id},#{username},#{birthday},#{sex},#{address})
+    </insert>
+
+    <delete id="deleteUserById" parameterType="int">
+        delete from user where id = #{id}
+    </delete>
+</mapper>

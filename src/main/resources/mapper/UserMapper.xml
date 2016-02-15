@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.puhui.mapper.UserMapper">
+    <!-- 根据id获取用户信息 -->
+    <select id="findUserById" parameterType="int" resultType="com.puhui.vo.User">
+        select * from user where id = #{id}
+    </select>
+    <!-- 自定义条件查询用户列表 -->
+    <select id="findUserByUsername" parameterType="java.lang.String"
+            resultType="com.puhui.vo.User">
+        select * from user where username like '%${value}%'
+    </select>
+    <!-- 添加用户 -->
+    <insert id="insertUser" parameterType="com.puhui.vo.User">
+        <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+            select LAST_INSERT_ID()
+        </selectKey>
+        insert into user(username,birthday,sex,address)
+        values(#{user.username},#{user.birthday},#{user.sex},#{user.address})
+    </insert>
+
+    <select id="findUserByHashMap" parameterType="hashmap" resultType="user">
+        SELECT * FROM user
+        <where>
+            <if test="id != null">
+                AND id = #{id}
+            </if>
+            <if test="username != null">
+                AND username like '%${username}%'
+            </if>
+        </where>
+    </select>
+    <select id="findUserByQueryVo" parameterType="QueryVo" resultType="com.puhui.vo.User">
+        SELECT * FROM user
+        <where>
+            <if test="user.username != null">
+                AND username =#{user.username}
+            </if>
+            <if test="user.id != null">
+                AND id = #{user.id}
+            </if>
+
+        </where>
+    </select>
+    <select id="getAllUser" resultType="java.lang.Integer">
+        SELECT COUNT(1) FROM user
+    </select>
+    <select id="queryUserByManyCondition" resultType="com.puhui.vo.User">
+        SELECT * FROM user
+        <where>
+            <if test="id != null">
+                AND id = #{id}
+            </if>
+            <if test="username != null">
+                AND username = #{username}
+            </if>
+            <if test="address != null">
+                AND address = #{address}
+            </if>
+        </where>
+    </select>
+    <select id="getMapByQueryAllUser" resultType="java.util.Map">
+        SELECT * FROM user WHERE id = 1;
+    </select>
+</mapper>
