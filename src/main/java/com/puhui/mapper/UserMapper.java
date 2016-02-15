@@ -5,6 +5,7 @@ import com.puhui.vo.User;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -14,17 +15,21 @@ import java.util.Map;
 public interface UserMapper {
     User findUserById(int id);
 
-    User findUserByUsername(String username);
+    List<User> findUserByUsername(String username);
 
     void insertUser(@Param("user") User user);
 
     User findUserByHashMap(HashMap<String, Object> userMap);
 
-    User findUserByQueryVo(QueryVo queryVo);
+    List<User> findUserByQueryVo(QueryVo queryVo);
 
     int getAllUser(User user);
 
     User queryUserByManyCondition(@Param("id") int id, @Param("username") String username, @Param("address") String address);
 
     Map<String, Object> getMapByQueryAllUser();
+
+    List<User> queryUserByIdList(QueryVo queryVo);
+
+    List<User> queryUsersByUserList(@Param("userList") List<User> userList);
 }

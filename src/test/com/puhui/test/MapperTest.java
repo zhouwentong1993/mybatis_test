@@ -4,11 +4,7 @@ import com.puhui.mapper.UserMapper;
 import com.puhui.vo.QueryVo;
 import com.puhui.vo.User;
 import junit.framework.TestCase;
-import org.apache.ibatis.executor.Executor;
-import org.apache.ibatis.executor.keygen.KeyGenerator;
 import org.apache.ibatis.io.Resources;
-import org.apache.ibatis.mapping.MappedStatement;
-import org.apache.ibatis.session.Configuration;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.apache.ibatis.session.SqlSessionFactoryBuilder;
@@ -16,10 +12,7 @@ import org.junit.Test;
 
 import java.io.InputStream;
 import java.lang.reflect.Field;
-import java.sql.Statement;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by zhouwentong1@gmail.com on 2016/2/10.
@@ -54,8 +47,8 @@ public class MapperTest extends TestCase {
     public void testFindUserByUsername() throws Exception {
         SqlSession sqlSession = sqlSessionFactory.openSession();
         UserMapper userMapper = sqlSession.getMapper(UserMapper.class);
-        User user = userMapper.findUserByUsername("张");
-        System.out.println(user);
+        List<User> userList = userMapper.findUserByUsername("张");
+        System.out.println(userList.size());
 
     }
 
@@ -77,12 +70,13 @@ public class MapperTest extends TestCase {
         //关闭session
         session.close();
     }
+
     public void testParameterByMap() throws Exception {
         //获取session
         SqlSession session = sqlSessionFactory.openSession();
         //获取mapper接口的代理对象
         UserMapper userMapper = session.getMapper(UserMapper.class);
-        HashMap<String, Object> userMap = new HashMap<String,Object>();
+        HashMap<String, Object> userMap = new HashMap<String, Object>();
         //要添加的数据
 //        User user = new User();
 //        user.setUsername("张三");
@@ -105,6 +99,7 @@ public class MapperTest extends TestCase {
 
     /**
      * 测试复合查询参数问题
+     *
      * @throws Exception
      */
     public void testQueryVo() throws Exception {
@@ -132,11 +127,11 @@ public class MapperTest extends TestCase {
         //关闭session
         QueryVo queryVo = new QueryVo();
         User user = new User();
-        user.setUsername("王五");
+        user.setUsername("张");
         user.setId(1);
         queryVo.setUser(user);
-        User queryUser = userMapper.findUserByQueryVo(queryVo);
-        System.out.println(queryUser);
+        List<User> userList = userMapper.findUserByQueryVo(queryVo);
+        System.out.println(userList.size());
         session.close();
     }
 
@@ -161,8 +156,51 @@ public class MapperTest extends TestCase {
         session.close();
     }
 
+    @Test
+    public void testQueryUserByIdList() throws Exception {
+        //获取session
+        SqlSession session = sqlSessionFactory.openSession();
+        //获取mapper接口的代理对象
+        UserMapper userMapper = session.getMapper(UserMapper.class);
+        QueryVo queryVo = new QueryVo();
+        List<Integer> ids = new ArrayList<>();
+        ids.add(1);
+        ids.add(2);
+        ids.add(10);
+        ids.add(16);
+        ids.add(22);
+        ids.add(24);
+        queryVo.setIds(ids);
+        List<User> userList = userMapper.queryUserByIdList(queryVo);
+        System.out.println(userList.size());
+        session.close();
+    }
+    @Test
+    public void testQueryUsersByUserList() throws Exception {
+        //获取session
+        SqlSession session = sqlSessionFactory.openSession();
+        //获取mapper接口的代理对象
+        UserMapper userMapper = session.getMapper(UserMapper.class);
+        List<User> users = new ArrayList<>();
+        User user = new User();
+        user.setId(1);
+        User user1 = new User();
+        user1.setId(2);
+        User user2 = new User();
+        user2.setId(10);
+        User user3 = new User();
+        user3.setId(16);
+        users.add(user);
+        users.add(user1);
+        users.add(user2);
+        users.add(user3);
+        List<User> userList = userMapper.queryUsersByUserList(users);
+        System.out.println(userList.get(0));
+        System.out.println(userList.size());
+        session.close();
+    }
+
     /**
-     *
      * @throws Exception
      */
     public void testQueryMap() throws Exception {

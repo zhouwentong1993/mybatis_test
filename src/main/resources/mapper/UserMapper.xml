@@ -3,8 +3,16 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.puhui.mapper.UserMapper">
+    <!--将数据库中的行和对象进行配置映射。主要是怕如果不能匹配出现问题-->
+    <resultMap id="userListMap" type="user">
+        <id column="id" property="id"/>
+        <result column="username" property="username"/>
+        <result column="address" property="address"/>
+        <result column="birthday" property="birthday"/>
+        <result column="sex" property="sex"/>
+    </resultMap>
     <!-- 根据id获取用户信息 -->
-    <select id="findUserById" parameterType="int" resultType="com.puhui.vo.User">
+    <select id="findUserById" parameterType="int" resultType="user">
         select * from user where id = #{id}
     </select>
     <!-- 自定义条件查询用户列表 -->
@@ -32,13 +40,13 @@
             </if>
         </where>
     </select>
-    <select id="findUserByQueryVo" parameterType="QueryVo" resultType="com.puhui.vo.User">
+    <select id="findUserByQueryVo" parameterType="QueryVo" resultMap="userListMap">
         SELECT * FROM user
         <where>
             <if test="user.username != null">
-                AND username =#{user.username}
+                AND username LIKE '%${user.username}%'
             </if>
-            <if test="user.id != null">
+            <if test="user.id == null">
                 AND id = #{user.id}
             </if>
 
@@ -61,7 +69,27 @@
             </if>
         </where>
     </select>
+
     <select id="getMapByQueryAllUser" resultType="java.util.Map">
         SELECT * FROM user WHERE id = 1;
     </select>
+
+    <!-- 对传入的 list 进行迭代，类似于 OGNL 表达式 -->
+    <select id="queryUserByIdList" resultType="com.puhui.vo.User" parameterType="QueryVo">
+        <if test="ids != null and ids.size > 0">
+            <foreach collection="ids" open="select * from user where id in (" close=")" item="id" separator=",">
+                #{id}
+            </foreach>
+        </if>
+    </select>
+
+    <select id="queryUsersByUserList" resultType="com.puhui.vo.User" parameterType="java.util.List">
+        <if test="userList != null and userList.size > 0">
+            <foreach collection="userList" open="select * from user where id in(" close=")" item="item" separator=",">
+                #{item.id}
+            </foreach>
+        </if>
+
+    </select>
+
 </mapper>
