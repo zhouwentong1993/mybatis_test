@@ -1,10 +1,12 @@
 package com.puhui.mapper;
 
+import com.puhui.vo.OrderCustom;
 import com.puhui.vo.QueryVo;
 import com.puhui.vo.User;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -27,4 +29,10 @@ public interface UserMapper {
     User queryUserByManyCondition(@Param("id") int id, @Param("username") String username, @Param("address") String address);
 
     Map<String, Object> getMapByQueryAllUser();
+
+    List<User> queryUserListByArray(Object[] userList);
+
+    List<User> queryUserListByStringArray(String[] idList);
+
+    List<OrderCustom> queryOrderList();
 }

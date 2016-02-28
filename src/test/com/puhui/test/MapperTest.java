@@ -1,6 +1,7 @@
 package com.puhui.test;
 
 import com.puhui.mapper.UserMapper;
+import com.puhui.vo.OrderCustom;
 import com.puhui.vo.QueryVo;
 import com.puhui.vo.User;
 import junit.framework.TestCase;
@@ -19,6 +20,7 @@ import java.lang.reflect.Field;
 import java.sql.Statement;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -158,6 +160,45 @@ public class MapperTest extends TestCase {
         UserMapper userMapper = session.getMapper(UserMapper.class);
         User user = userMapper.queryUserByManyCondition(1, "王五", "北京市");
         System.out.println(user);
+        session.close();
+    }
+
+    public void testQueryUserListByArray() throws Exception {
+        //获取session
+        SqlSession session = sqlSessionFactory.openSession();
+        //获取mapper接口的代理对象
+        UserMapper userMapper = session.getMapper(UserMapper.class);
+        User user = new User();
+        user.setId(1);
+        User user1 = new User();
+        user1.setId(2);
+        Object[] arr = new Object[2];
+        arr[0] = user;
+        arr[1] = user1;
+        List<User> users = userMapper.queryUserListByArray(arr);
+        System.out.println(users.size());
+        session.close();
+    }
+
+    public void testQueryUserListByStringArray() throws Exception {
+        //获取session
+        SqlSession session = sqlSessionFactory.openSession();
+        //获取mapper接口的代理对象
+        UserMapper userMapper = session.getMapper(UserMapper.class);
+        String[] idList = {"1","2","1212"};
+        List<User> userList = userMapper.queryUserListByStringArray(idList);
+        System.out.println(userList.size());
+        session.close();
+    }
+    public void testQueryOrderList() throws Exception {
+        //获取session
+        SqlSession session = sqlSessionFactory.openSession();
+        //获取mapper接口的代理对象
+        UserMapper userMapper = session.getMapper(UserMapper.class);
+        List<OrderCustom> orderCustomList = userMapper.queryOrderList();
+        orderCustomList.forEach(System.out::println);
+
+
         session.close();
     }
 
