@@ -1,6 +1,7 @@
 package com.puhui.vo;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * Created by zhouwentong1@gmail.com on 2016/2/9.
@@ -12,6 +13,15 @@ public class User {
     private String sex;
     private Date birthday;
     private String address;
+    private List<Orders> orderses;
+
+    public List<Orders> getOrderses() {
+        return orderses;
+    }
+
+    public void setOrderses(List<Orders> orderses) {
+        this.orderses = orderses;
+    }
 
     public int getId() {
         return id;
@@ -61,6 +71,6 @@ public class User {
                 ", sex='" + sex + '\'' +
                 ", birthday=" + birthday +
                 ", address='" + address + '\'' +
-                '}';
+                '}' + orderses.toString();
     }
 }

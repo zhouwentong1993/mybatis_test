@@ -2,6 +2,7 @@ package com.puhui.test;
 
 import com.puhui.mapper.UserMapper;
 import com.puhui.vo.OrderCustom;
+import com.puhui.vo.Orders;
 import com.puhui.vo.QueryVo;
 import com.puhui.vo.User;
 import junit.framework.TestCase;
@@ -190,6 +191,7 @@ public class MapperTest extends TestCase {
         System.out.println(userList.size());
         session.close();
     }
+
     public void testQueryOrderList() throws Exception {
         //获取session
         SqlSession session = sqlSessionFactory.openSession();
@@ -199,6 +201,38 @@ public class MapperTest extends TestCase {
         orderCustomList.forEach(System.out::println);
 
 
+        session.close();
+    }
+    public void testQueryOrderDetailList() throws Exception {
+        //获取session
+        SqlSession session = sqlSessionFactory.openSession();
+        //获取mapper接口的代理对象
+        UserMapper userMapper = session.getMapper(UserMapper.class);
+        List<Orders> orderCustomList = userMapper.queryOrderDetailList();
+        orderCustomList.forEach(System.out::println);
+        session.close();
+    }
+
+    public void testQueryOrderList2() throws Exception {
+        //获取session
+        SqlSession session = sqlSessionFactory.openSession();
+        //获取mapper接口的代理对象
+        UserMapper userMapper = session.getMapper(UserMapper.class);
+        List<Orders> orderCustomList = userMapper.queryOrderList2();
+        for (Orders orderCustom : orderCustomList) {
+            System.out.println(orderCustom);
+        }
+        session.close();
+    }
+    public void testQueryOrderDetailList2() throws Exception {
+        //获取session
+        SqlSession session = sqlSessionFactory.openSession();
+        //获取mapper接口的代理对象
+        UserMapper userMapper = session.getMapper(UserMapper.class);
+        List<User> orderCustomList = userMapper.queryOrderDetailList2();
+        for (User orderCustom : orderCustomList) {
+            System.out.println(orderCustom);
+        }
         session.close();
     }
 

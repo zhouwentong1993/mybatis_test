@@ -1,6 +1,7 @@
 package com.puhui.mapper;
 
 import com.puhui.vo.OrderCustom;
+import com.puhui.vo.Orders;
 import com.puhui.vo.QueryVo;
 import com.puhui.vo.User;
 import org.apache.ibatis.annotations.Param;
@@ -35,4 +36,10 @@ public interface UserMapper {
     List<User> queryUserListByStringArray(String[] idList);
 
     List<OrderCustom> queryOrderList();
+
+    List<Orders> queryOrderList2();
+
+    List<Orders> queryOrderDetailList();
+
+    List<User> queryOrderDetailList2();
 }
